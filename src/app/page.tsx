@@ -17,7 +17,7 @@ export default async function Home() {
     ).then((data) => data.json());
 
     return (
-        <main className="p-5">
+        <div className="p-5">
             <h1 className="text-2xl">My Github</h1>
             <ul>
                 {repos.map((repo) => {
@@ -30,6 +30,6 @@ export default async function Home() {
                     );
                 })}
             </ul>
-        </main>
+        </div>
     );
 }

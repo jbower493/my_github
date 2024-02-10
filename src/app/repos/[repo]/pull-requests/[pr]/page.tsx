@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ghToken } from "@/utils/env";
+import File from "@/app/repos/[repo]/pull-requests/[pr]/File";
 
 type DetailedPr = {
     id: number;
@@ -10,7 +11,7 @@ type DetailedPr = {
     deletions: number;
 };
 
-type ChangedFile = {
+export type ChangedFile = {
     sha: string;
     filename: string;
     status: string;
@@ -56,6 +57,11 @@ async function Pr({ params }: Props) {
                 <span>+ {pullRequest.additions}, </span>
                 <span>- {pullRequest.additions}</span>
             </p>
+            <section className="flex flex-col gap-5 mt-5">
+                {changedFiles.map((file) => {
+                    return <File key={file.filename} file={file} />;
+                })}
+            </section>
         </div>
     );
 }

@@ -48,13 +48,22 @@ async function Pr({ params }: Props) {
     ).then((data) => data.json());
 
     const viewedFiles = await getPrViewedFiles(params.repo, Number(params.pr));
+    const numOfFilesViewed = viewedFiles.filter(
+        (file) => file.is_viewed
+    ).length;
 
     return (
         <div>
             <h2 className="text-lg">
                 {pullRequest.number} - {pullRequest.title}
             </h2>
-            <p>Changed files: {pullRequest.changed_files}</p>
+            <div className="flex justify-between items-center">
+                <p>Changed files: {pullRequest.changed_files}</p>
+                <p>
+                    {numOfFilesViewed} / {pullRequest.changed_files} files
+                    viewed
+                </p>
+            </div>
             <p>
                 <span>+ {pullRequest.additions}, </span>
                 <span>- {pullRequest.additions}</span>

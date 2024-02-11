@@ -30,7 +30,7 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
 
     if (isDiffHeaderLine(line)) {
         return (
-            <p className="bg-blue-900 py-2 px-4">
+            <p className="bg-blue-900 py-2 px-4 text-sm">
                 <span className="w-24 inline-block" />
                 {line}
             </p>
@@ -41,7 +41,7 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
         return (
             <p
                 key={index}
-                className="bg-green-900 py-1 px-4 whitespace-pre flex items-center"
+                className="bg-green-900 py-1 px-4 whitespace-pre flex items-center text-sm"
             >
                 <span className="inline-flex justify-evenly">
                     <span className="w-12 inline-flex justify-center" />
@@ -57,7 +57,10 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
 
     if (isRemovedLine(line)) {
         return (
-            <p key={index} className="bg-red-900 py-1 px-4 whitespace-pre">
+            <p
+                key={index}
+                className="bg-red-900 py-1 px-4 whitespace-pre text-sm"
+            >
                 <span className="w-24 inline-flex justify-evenly">
                     <span className="w-12 inline-flex justify-center">
                         {originalLineNumber}
@@ -74,7 +77,7 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
     const trimmedLine = line.slice(1);
 
     return (
-        <p key={index} className="py-1 px-4 whitespace-pre">
+        <p key={index} className="py-1 px-4 whitespace-pre text-sm">
             <span className="w-24 inline-flex justify-evenly">
                 <span className="w-12 inline-flex justify-center">
                     {originalLineNumber}

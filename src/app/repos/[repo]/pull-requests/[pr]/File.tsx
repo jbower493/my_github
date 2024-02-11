@@ -15,13 +15,14 @@ interface Props {
 }
 
 function File({ file, isViewed, repo, pr }: Props) {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(isViewed);
 
     function toggleIsViewed() {
         if (isViewed) {
             // Server action
             unviewFile(repo, pr, file.filename);
         } else {
+            setIsCollapsed(true);
             // Server action
             viewFile(repo, pr, file.filename);
         }

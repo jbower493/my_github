@@ -2,9 +2,13 @@ import Line from "./Line";
 
 interface Props {
     lines: string[];
+    prHeadSha: string;
+    filePath: string;
+    repo: string;
+    pr: number;
 }
 
-function DiffSet({ lines }: Props) {
+function DiffSet({ lines, prHeadSha, filePath, repo, pr }: Props) {
     const firstLine = lines[0];
     const lineNumbers = firstLine.split("@@")[1];
     const numbers = lineNumbers.split(/[, ]/);
@@ -14,7 +18,7 @@ function DiffSet({ lines }: Props) {
     const newDiffSetLength = Math.abs(Number(numbers[4]));
 
     return lines.map((line, index) => {
-        function _getOriginalLineNumber() {
+        function getOriginalLineNumber() {
             let counter = 0;
 
             for (let i = 0; i < index; i++) {
@@ -26,7 +30,7 @@ function DiffSet({ lines }: Props) {
             return originalStartLineNumber + counter;
         }
 
-        function _getNewLineNumber() {
+        function getNewLineNumber() {
             let counter = 0;
 
             for (let i = 0; i < index; i++) {
@@ -38,43 +42,17 @@ function DiffSet({ lines }: Props) {
             return newStartLineNumber + counter;
         }
 
-        function getOriginalLineNumber() {
-            const originalLines = lines.filter(
-                (line) => !line.startsWith("@@") && !line.startsWith("+")
-            );
-
-            const originalLinesIndex = originalLines.indexOf(line);
-            const originalLineNumber =
-                originalStartLineNumber + originalLinesIndex;
-
-            return originalLineNumber;
-        }
-
-        function getNewLineNumber() {
-            const newLines = lines.filter(
-                (line) => !line.startsWith("@@") && !line.startsWith("-")
-            );
-
-            const newLinesIndex = newLines.indexOf(line);
-            const newLineNumber = newStartLineNumber + newLinesIndex;
-
-            return newLineNumber;
-        }
-        // function getNewLineNumber(startLineNumber: number) {
-        //     if (startLineNumber === 0) {
-        //         return startLineNumber + index;
-        //     }
-
-        //     return startLineNumber + index - 1;
-        // }
-
         return (
             <Line
                 key={index}
                 line={line}
                 index={index}
-                originalLineNumber={_getOriginalLineNumber()}
-                newLineNumber={_getNewLineNumber()}
+                originalLineNumber={getOriginalLineNumber()}
+                newLineNumber={getNewLineNumber()}
+                prHeadSha={prHeadSha}
+                filePath={filePath}
+                repo={repo}
+                pr={pr}
             />
         );
     });

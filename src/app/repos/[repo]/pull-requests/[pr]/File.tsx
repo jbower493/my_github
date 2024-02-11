@@ -5,26 +5,27 @@ import DiffSet from "./DiffSet";
 import { useState } from "react";
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 import Checkbox from "./checkbox";
-import { unviewFile, viewFile } from "./serverActions";
+import { unviewFileAction, viewFileAction } from "./serverActions";
 
 interface Props {
     file: ChangedFile;
     isViewed: boolean;
     repo: string;
     pr: number;
+    prHeadSha: string;
 }
 
-function File({ file, isViewed, repo, pr }: Props) {
+function File({ file, isViewed, repo, pr, prHeadSha }: Props) {
     const [isCollapsed, setIsCollapsed] = useState(isViewed);
 
     function toggleIsViewed() {
         if (isViewed) {
             // Server action
-            unviewFile(repo, pr, file.filename);
+            unviewFileAction(repo, pr, file.filename);
         } else {
             setIsCollapsed(true);
             // Server action
-            viewFile(repo, pr, file.filename);
+            viewFileAction(repo, pr, file.filename);
         }
     }
 
@@ -63,7 +64,16 @@ function File({ file, isViewed, repo, pr }: Props) {
             {isCollapsed ? null : (
                 <div>
                     {diffSets.map((diffSet, index) => {
-                        return <DiffSet key={index} lines={diffSet} />;
+                        return (
+                            <DiffSet
+                                key={index}
+                                lines={diffSet}
+                                prHeadSha={prHeadSha}
+                                filePath={file.filename}
+                                repo={repo}
+                                pr={pr}
+                            />
+                        );
                     })}
                 </div>
             )}

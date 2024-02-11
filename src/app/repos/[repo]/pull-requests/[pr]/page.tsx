@@ -9,6 +9,9 @@ type DetailedPr = {
     changed_files: number;
     additions: number;
     deletions: number;
+    head: {
+        sha: string;
+    };
 };
 
 export type ChangedFile = {
@@ -84,6 +87,7 @@ async function Pr({ params }: Props) {
                             isViewed={isViewed}
                             repo={params.repo}
                             pr={Number(params.pr)}
+                            prHeadSha={pullRequest.head.sha}
                         />
                     );
                 })}

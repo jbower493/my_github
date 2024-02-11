@@ -70,6 +70,9 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
         );
     }
 
+    // Lines that have not been edited seem to have 1 random space at the start that we need to get rid of
+    const trimmedLine = line.slice(1);
+
     return (
         <p key={index} className="py-1 px-4 whitespace-pre">
             <span className="w-24 inline-flex justify-evenly">
@@ -81,7 +84,7 @@ function Line({ line, index, originalLineNumber, newLineNumber }: Props) {
                 </span>
             </span>
             <span className="w-5 inline-block" />
-            {line}
+            {trimmedLine}
         </p>
     );
 }

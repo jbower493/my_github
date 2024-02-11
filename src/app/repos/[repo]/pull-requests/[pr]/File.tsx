@@ -2,22 +2,30 @@
 
 import { ChangedFile } from "@/app/repos/[repo]/pull-requests/[pr]/page";
 import DiffSet from "./DiffSet";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
-import useLocalStorage from "@/utils/hooks/useLocalStorage";
 import Checkbox from "./checkbox";
+import { unviewFile, viewFile } from "./serverActions";
 
 interface Props {
     file: ChangedFile;
+    isViewed: boolean;
+    repo: string;
+    pr: number;
 }
 
-function File({ file }: Props) {
+function File({ file, isViewed, repo, pr }: Props) {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
-    const [isViewed, setIsViewed] = useLocalStorage(
-        `${file.filename}-isViewed`,
-        "no"
-    );
+    function toggleIsViewed() {
+        if (isViewed) {
+            // Server action
+            unviewFile(repo, pr, file.filename);
+        } else {
+            // Server action
+            viewFile(repo, pr, file.filename);
+        }
+    }
 
     const patchLines = file.patch.split("\n");
 
@@ -34,10 +42,6 @@ function File({ file }: Props) {
     });
     diffSets.push(oneDiffBuffer);
 
-    useEffect(() => {
-        setIsViewed(isViewed);
-    }, []);
-
     return (
         <div className="border-neutral-900 border rounded-md overflow-hidden">
             <div className="bg-neutral-700 border-b-neutral-600 py-3 px-4 flex justify-between items-center w-full">
@@ -50,12 +54,8 @@ function File({ file }: Props) {
                 <div>
                     <Checkbox
                         label="Viewed"
-                        isChecked={isViewed === "yes"}
-                        onChange={() =>
-                            setIsViewed((prev) =>
-                                prev === "yes" ? "no" : "yes"
-                            )
-                        }
+                        isChecked={isViewed}
+                        onChange={toggleIsViewed}
                     />
                 </div>
             </div>

@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { ghToken } from "@/utils/env";
 import File from "@/app/repos/[repo]/pull-requests/[pr]/File";
+import { getPrViewedFiles, markFileViewed } from "@/backend/db/operations";
 
 type DetailedPr = {
     id: number;
@@ -47,6 +47,8 @@ async function Pr({ params }: Props) {
         }
     ).then((data) => data.json());
 
+    const viewedFiles = await getPrViewedFiles(params.repo, Number(params.pr));
+
     return (
         <div>
             <h2 className="text-lg">
@@ -59,7 +61,22 @@ async function Pr({ params }: Props) {
             </p>
             <section className="flex flex-col gap-5 mt-5">
                 {changedFiles.map((file) => {
-                    return <File key={file.filename} file={file} />;
+                    const isViewed = viewedFiles.some(
+                        ({ file_path, repo, is_viewed }) =>
+                            file_path === file.filename &&
+                            repo === params.repo &&
+                            is_viewed
+                    );
+
+                    return (
+                        <File
+                            key={file.filename}
+                            file={file}
+                            isViewed={isViewed}
+                            repo={params.repo}
+                            pr={Number(params.pr)}
+                        />
+                    );
                 })}
             </section>
         </div>
